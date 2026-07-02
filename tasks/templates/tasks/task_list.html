@@ -1,0 +1,95 @@
+{% extends "tasks/base.html" %}
+
+{% block title %}Tarefas{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Lista de Tarefas</h1>
+  <a href="{% url 'tasks:task-create' %}" class="btn btn-primary">
+    Adicionar tarefa
+  </a>
+</div>
+
+{% if task_list %}
+  {% for task in task_list %}
+    <div class="task-card {% if task.is_completed %}done-task{% endif %}">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <h4>
+            {{ task.content }}
+          </h4>
+
+          <p class="mb-1">
+            <strong>Status:</strong>
+            {% if task.is_completed %}
+              Done
+            {% else %}
+              Not done
+            {% endif %}
+          </p>
+
+          <p class="mb-1">
+            <strong>Criada em:</strong>
+            {{ task.created_at|date:"d/m/Y H:i" }}
+          </p>
+
+          <p class="mb-1">
+            <strong>Prazo:</strong>
+            {% if task.deadline %}
+              {{ task.deadline|date:"d/m/Y H:i" }}
+            {% else %}
+              Sem prazo
+            {% endif %}
+          </p>
+
+          <p class="mb-0">
+            <strong>Tags:</strong>
+            {% for tag in task.tags.all %}
+              <span class="tag-pill">{{ tag.name }}</span>
+            {% empty %}
+              Sem tags
+            {% endfor %}
+          </p>
+        </div>
+
+        <div class="text-end">
+          <form
+            action="{% url 'tasks:task-toggle' task.pk %}"
+            method="post"
+            class="mb-2"
+          >
+            {% csrf_token %}
+            {% if task.is_completed %}
+              <button type="submit" class="btn btn-warning btn-sm">
+                Undo
+              </button>
+            {% else %}
+              <button type="submit" class="btn btn-success btn-sm">
+                Complete
+              </button>
+            {% endif %}
+          </form>
+
+          <a
+            href="{% url 'tasks:task-update' task.pk %}"
+            class="btn btn-secondary btn-sm mb-2"
+          >
+            Atualizar
+          </a>
+
+          <a
+            href="{% url 'tasks:task-delete' task.pk %}"
+            class="btn btn-danger btn-sm mb-2"
+          >
+            Excluir
+          </a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="alert alert-info">
+    Nenhuma tarefa cadastrada ainda.
+  </div>
+{% endif %}
+{% endblock %}

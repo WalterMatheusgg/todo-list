@@ -1,0 +1,29 @@
+{% extends "tasks/base.html" %}
+
+{% block title %}
+  {% if object %}Atualizar tag{% else %}Criar tag{% endif %}
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">
+  {% if object %}Atualizar tag{% else %}Criar tag{% endif %}
+</h1>
+
+<form method="post" class="card p-4">
+  {% csrf_token %}
+
+  <div class="mb-3">
+    <label class="form-label">Nome</label>
+    {{ form.name }}
+    {{ form.name.errors }}
+  </div>
+
+  <button type="submit" class="btn btn-primary">
+    Salvar
+  </button>
+
+  <a href="{% url 'tasks:tag-list' %}" class="btn btn-secondary">
+    Cancelar
+  </a>
+</form>
+{% endblock %}
