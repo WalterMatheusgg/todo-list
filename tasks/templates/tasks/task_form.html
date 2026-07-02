@@ -1,0 +1,49 @@
+{% extends "tasks/base.html" %}
+
+{% block title %}
+  {% if object %}Atualizar tarefa{% else %}Criar tarefa{% endif %}
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">
+  {% if object %}Atualizar tarefa{% else %}Criar tarefa{% endif %}
+</h1>
+
+<form method="post" class="card p-4">
+  {% csrf_token %}
+
+  <div class="mb-3">
+    <label class="form-label">Conteúdo</label>
+    {{ form.content }}
+    {{ form.content.errors }}
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Prazo</label>
+    {{ form.deadline }}
+    {{ form.deadline.errors }}
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Tags</label>
+    {{ form.tags }}
+    {{ form.tags.errors }}
+  </div>
+
+  <div class="form-check mb-3">
+    {{ form.is_completed }}
+    <label class="form-check-label">
+      Concluída
+    </label>
+    {{ form.is_completed.errors }}
+  </div>
+
+  <button type="submit" class="btn btn-primary">
+    Salvar
+  </button>
+
+  <a href="{% url 'tasks:index' %}" class="btn btn-secondary">
+    Cancelar
+  </a>
+</form>
+{% endblock %}
